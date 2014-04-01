@@ -15,7 +15,7 @@ bluetoothPort = 1
 socket.connect((arduinoAddress,bluetoothPort))
 
 #Send the data
-socket.send(sys.argv[0])
+socket.send(sys.argv[1])
 
 #Unfortunately, sending data via a seperate file doesn't really manage
 #the Blueooth connection in a long lived manner
