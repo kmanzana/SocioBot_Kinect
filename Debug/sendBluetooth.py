@@ -8,7 +8,7 @@ from bluetooth import *
 #  but for Bluetooth
 socket = BluetoothSocket(RFCOMM)
 
-arduinoAddress = "00:06:66:08:A5"
+arduinoAddress = "00:06:66:08:61:A5"
 bluetoothPort = 1
 
 #Connect to device
