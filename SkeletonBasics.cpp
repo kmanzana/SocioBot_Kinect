@@ -9,9 +9,12 @@
 #include "SkeletonBasics.h"
 #include "resource.h"
 #include <iostream>
+
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <cmath>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -29,6 +32,7 @@ static const float g_InferredBoneThickness = 1.0f;
 /// <returns>status</returns>
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+	WSAStartup();
     CSkeletonBasics application;
     application.Run(hInstance, nCmdShow);
 }
@@ -400,8 +404,9 @@ vector<double> calculateAngles(const NUI_SKELETON_DATA& skel){
 	double leftGamma  = calculateGamma(childPoints, NUI_SKELETON_POSITION_ELBOW_LEFT,
 		                                            NUI_SKELETON_POSITION_SHOULDER_LEFT,
 													NUI_SKELETON_POSITION_WRIST_LEFT);
-
-	vector<double> angles;
+				  					 
+		
+	vector<double> angles;			
 	angles.push_back(rightAlpha);
 	angles.push_back(leftAlpha);
 	angles.push_back(rightBeta);
@@ -409,10 +414,15 @@ vector<double> calculateAngles(const NUI_SKELETON_DATA& skel){
 	angles.push_back(rightGamma);
 	angles.push_back(leftGamma);
 
+	vector<double> anglesInDeg;
+	for (double angle : angles){
+		anglesInDeg.push_back(angle * 180 / M_PI);
+	}
+
 	cout << "right alpha: " << rightAlpha << " left alpha: " << leftAlpha << endl;
 	cout << "right beta:  " << rightBeta  << " left beta:  " << leftBeta << endl;
 	cout << "right gamma: " << rightGamma << " left gamma: " << leftGamma << endl;
-	return angles;
+	return anglesInDeg;
 
 }
 
@@ -477,7 +487,7 @@ void CSkeletonBasics::DrawSkeleton(const NUI_SKELETON_DATA & skel, int windowWid
         m_Points[i] = SkeletonToScreen(skel.SkeletonPositions[i], windowWidth, windowHeight);
     }
 
-	calculateAngles(skel);
+
 
     // Render Torso
     DrawBone(skel, NUI_SKELETON_POSITION_HEAD, NUI_SKELETON_POSITION_SHOULDER_CENTER);
@@ -522,6 +532,13 @@ void CSkeletonBasics::DrawSkeleton(const NUI_SKELETON_DATA & skel, int windowWid
             m_pRenderTarget->DrawEllipse(ellipse, m_pBrushJointTracked);
         }
     }
+	vector<double> angles = calculateAngles(skel);
+	ofstream fileOut;
+	fileOut.open("angles.txt");
+	for (double angle : angles){
+		fileOut << angle << "\n";
+	}
+	fileOut.close();
 }
 
 /// <summary>
