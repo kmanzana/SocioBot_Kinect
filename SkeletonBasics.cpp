@@ -15,6 +15,8 @@
 #include <cmath>
 #include <vector>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -32,7 +34,6 @@ static const float g_InferredBoneThickness = 1.0f;
 /// <returns>status</returns>
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	WSAStartup();
     CSkeletonBasics application;
     application.Run(hInstance, nCmdShow);
 }
@@ -164,12 +165,25 @@ void CSkeletonBasics::Update()
     }
 }
 
+/**
+ * Basically handles sending the values over bluetooth to the robot.
+ */										
+void sendToRobot(vector<double> anglesToSend){
+	stringstream bluetoothCommand; 				  
+	bluetoothCommand << "python sendBlueooth.py \"";
+	for (double angle : anglesToSend){
+		bluetoothCommand << setfill('0') << setw(3) << (int)angle << " ";
+	}
+	bluetoothCommand << "\"";
+	system(bluetoothCommand.str().c_str());
+}
+
 /// <summary>
 /// Handles window messages, passes most to the class instance to handle
 /// </summary>
 /// <param name="hWnd">window message is for</param>
 /// <param name="uMsg">message</param>
-/// <param name="wParam">message data</param>
+/// <param name="wParam">message data</param>																	 
 /// <param name="lParam">additional message data</param>
 /// <returns>result of message processing</returns>
 LRESULT CALLBACK CSkeletonBasics::MessageRouter(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -533,12 +547,7 @@ void CSkeletonBasics::DrawSkeleton(const NUI_SKELETON_DATA & skel, int windowWid
         }
     }
 	vector<double> angles = calculateAngles(skel);
-	ofstream fileOut;
-	fileOut.open("angles.txt");
-	for (double angle : angles){
-		fileOut << angle << "\n";
-	}
-	fileOut.close();
+	sendToRobot(angles);
 }
 
 /// <summary>
