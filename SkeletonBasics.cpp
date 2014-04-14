@@ -18,6 +18,7 @@
 #include <sstream>
 #include <iomanip>
 
+
 using namespace std;
 
 static const float g_JointThickness = 3.0f;
@@ -170,12 +171,12 @@ void CSkeletonBasics::Update()
  */										
 void sendToRobot(vector<double> anglesToSend){
 	stringstream bluetoothCommand; 				  
-	bluetoothCommand << "python sendBlueooth.py \"";
+	bluetoothCommand << "python Debug\\sendBluetooth.py \"";
 	for (double angle : anglesToSend){
 		bluetoothCommand << setfill('0') << setw(3) << (int)angle << " ";
 	}
 	bluetoothCommand << "\"";
-	system(bluetoothCommand.str().c_str());
+	system((bluetoothCommand.str() + " & PAUSE").c_str());
 }
 
 /// <summary>
