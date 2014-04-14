@@ -10,3 +10,6 @@ Requirements:
 * Windows SDK(v6 or v7)
 * Kinect SDK
 * Microsoft Bluetooth Drivers stack
+* Microsoft Visual Studio 2013(for C++ 11 foreach loops)
+ 
+ 
