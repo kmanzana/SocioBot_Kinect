@@ -171,12 +171,12 @@ void CSkeletonBasics::Update()
  */										
 void sendToRobot(vector<double> anglesToSend){
 	stringstream bluetoothCommand; 				  
-	bluetoothCommand << "python Debug\\sendBluetooth.py \"";
+	bluetoothCommand << "python sendBluetooth.py \"";
 	for (double angle : anglesToSend){
 		bluetoothCommand << setfill('0') << setw(3) << (int)angle;
 	}
 	bluetoothCommand << "\"";
-	system((bluetoothCommand.str() + " & PAUSE").c_str());
+	system((bluetoothCommand.str() + " & cd & PAUSE").c_str());
 }
 
 /// <summary>
