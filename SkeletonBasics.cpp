@@ -173,7 +173,7 @@ void sendToRobot(vector<double> anglesToSend){
 	stringstream bluetoothCommand; 				  
 	bluetoothCommand << "python Debug\\sendBluetooth.py \"";
 	for (double angle : anglesToSend){
-		bluetoothCommand << setfill('0') << setw(3) << (int)angle << " ";
+		bluetoothCommand << setfill('0') << setw(3) << (int)angle;
 	}
 	bluetoothCommand << "\"";
 	system((bluetoothCommand.str() + " & PAUSE").c_str());
